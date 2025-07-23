@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+		
+		<style>
+			.mermaid-container {
+				max-height: 800px; /* Adjust this based on your layout */
+				overflow-y: auto;
+				padding: 1em;
+				background-color: #1e1e1e; /* optional dark background */
+				border-radius: 8px;
+			}
+		</style>
+
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section>
+					<div class="mermaid-container">
+						<pre class="mermaid">
+%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '18px' }}}%%
+classDiagram
+    class DBConnector {
+        -conn: Sql
+        +connect(): Sql
+        +disconnect(): void
+    }
+
+    class VariantFilteringDBConnector {
+        +getRegionsFromFeatures(): String
+    }
+
+    class CompletionMessage {
+        +completionMessage: Map
+        +initCompletionMessage(): void
+        +writeCompletionJson(): void
+        +addCompletionMessageField(): void
+    }
+
+    class WorkflowVariantFiltering {
+        -params: Map
+        -final_vcf: Map
+        -sampleDiscordance: Map
+        +getConnection(): VariantFilteringDBConnector
+        +registerMessageHandlers(): void
+        +setFinalVcf(): void
+        ...
+    }
+
+	class SharedStockNamesByStudy {
+		-tgdrs: List
+		-studiesNames: Map
+		-preservedStudiesNames: Map
+		-sampleMetaData: Map
+		-sampleTgdrs: Map
+		+readSharedSamples(): void
+		+retainHighestSample(): Map
+		+getStandardName(): Set
+		+renameStudiesNames(): void
+		+removeFirstHyphenInstance(): String
+		+createSampleWithDuplicateStudiesObject(): Maps
+		+buildSampleNamesQuery(List tgdrs): String
+		+getPairwiseComparison(): Map
+	}
+
+    VariantFilteringDBConnector --|> DBConnector : extends
+    WorkflowVariantFiltering ..> VariantFilteringDBConnector : uses
+    WorkflowVariantFiltering ..> CompletionMessage : uses
+	WorkflowVariantFiltering ..> SharedStockNamesByStudy : uses
+
+						</pre>
+					</div>
+				</section>
+
+				<section>
+					<pre class="mermaid">
+						%%{init: {'theme': 'dark', 'themeVariables': { 'fontSize': '18px' }}}%%
+						classDiagram
+						class DBConnectionManager {
+							-conn: Sql
+							-lock: Object
+							+getConnection(): Sql
+							+disconnect(): void
+						}
+						class GenomeFtp {
+							
+						}
+					</pre>
+				</section>
+
+				<section>
+					<p style="letter-spacing: 2px;">| <strong>Analysis Panel</strong> | <strong>Landscape Genomics</strong> | <strong>Demo</strong> |</p>
+					<img src="https://treegenesdb.org/sites/all/modules/custom_modules/cartogratree_landing/images/cp_header_2024.jpg">
+				</section>
+				<section>
+					<h2>Analysis Panel Overview</h2>
+					<div class="mermaid-container">
+						<pre class="mermaid">
+							%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true, 'fontSize': '30px'}}}%%
+							flowchart LR
+							subgraph VCF Processing
+							A1{Selected Multiple Studies} --> |YES|A[VCF Sample Overlap] --> B[Genotype Overlap] --> C[Merge VCFs] --> D[VCF Filtering]
+							A1{Selected Multiple Studies} --> D[VCF Filtering]
+							end
+							subgraph MeteData
+							E1[Phenotypic Data]
+							E2[Environmental Data]
+							end
+							subgraph Analysis
+							D[VCF Filtering] --> F1[Population Structure]
+							D[VCF Filtering] --> F2[Genome-Wide Association Study]
+							E1[Phenotypic Data] --> F2[Genome-Wide Association Study]
+							E2[Environmental Data] --> F2[Genome-Wide Association Study]
+							end
+						</pre>
+					</div>
+				</section>
+
+				<section>
+					<h2>NextFlow</h2>
+					<p>Workflow management software</p>
+					<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 800px; margin: 40px auto;">
+					  
+					  <div style="background-color: #e0e0e0; color: #000; border-radius: 12px; padding: 20px; display: flex; align-items: center; font-size: 1.2em;">
+						<!-- Reproducible Icon -->
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height="40" width="40" style="margin-right: 15px;"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+							<path d="M0 224c0 17.7 14.3 32 32 32s32-14.3 32-32c0-53 43-96 96-96l160 0 0 32c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l64-64c12.5-12.5 12.5-32.8 0-45.3l-64-64c-9.2-9.2-22.9-11.9-34.9-6.9S320 19.1 320 32l0 32L160 64C71.6 64 0 135.6 0 224zm512 64c0-17.7-14.3-32-32-32s-32 14.3-32 32c0 53-43 96-96 96l-160 0 0-32c0-12.9-7.8-24.6-19.8-29.6s-25.7-2.2-34.9 6.9l-64 64c-12.5 12.5-12.5 32.8 0 45.3l64 64c9.2 9.2 22.9 11.9 34.9 6.9s19.8-16.6 19.8-29.6l0-32 160 0c88.4 0 160-71.6 160-160z"/>
+						</svg>
+						<span>Reproducible</span>
+					  </div>
+					  
+					  <div style="background-color: #e0e0e0; color: #000; border-radius: 12px; padding: 20px; display: flex; align-items: center; font-size: 1.2em;">
+						<!-- Concurrency Icon -->
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="40" height="40" style="margin-right: 15px;"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+							<path d="M269.5 69.9c11.1-7.9 25.9-7.9 37 0C329 85.4 356.5 96 384 96c26.9 0 55.4-10.8 77.4-26.1c0 0 0 0 0 0c11.9-8.5 28.1-7.8 39.2 1.7c14.4 11.9 32.5 21 50.6 25.2c17.2 4 27.9 21.2 23.9 38.4s-21.2 27.9-38.4 23.9c-24.5-5.7-44.9-16.5-58.2-25C449.5 149.7 417 160 384 160c-31.9 0-60.6-9.9-80.4-18.9c-5.8-2.7-11.1-5.3-15.6-7.7c-4.5 2.4-9.7 5.1-15.6 7.7c-19.8 9-48.5 18.9-80.4 18.9c-33 0-65.5-10.3-94.5-25.8c-13.4 8.4-33.7 19.3-58.2 25c-17.2 4-34.4-6.7-38.4-23.9s6.7-34.4 23.9-38.4C42.8 92.6 61 83.5 75.3 71.6c11.1-9.5 27.3-10.1 39.2-1.7c0 0 0 0 0 0C136.7 85.2 165.1 96 192 96c27.5 0 55-10.6 77.5-26.1zm37 288C329 373.4 356.5 384 384 384c26.9 0 55.4-10.8 77.4-26.1c0 0 0 0 0 0c11.9-8.5 28.1-7.8 39.2 1.7c14.4 11.9 32.5 21 50.6 25.2c17.2 4 27.9 21.2 23.9 38.4s-21.2 27.9-38.4 23.9c-24.5-5.7-44.9-16.5-58.2-25C449.5 437.7 417 448 384 448c-31.9 0-60.6-9.9-80.4-18.9c-5.8-2.7-11.1-5.3-15.6-7.7c-4.5 2.4-9.7 5.1-15.6 7.7c-19.8 9-48.5 18.9-80.4 18.9c-33 0-65.5-10.3-94.5-25.8c-13.4 8.4-33.7 19.3-58.2 25c-17.2 4-34.4-6.7-38.4-23.9s6.7-34.4 23.9-38.4c18.1-4.2 36.2-13.3 50.6-25.2c11.1-9.4 27.3-10.1 39.2-1.7c0 0 0 0 0 0C136.7 373.2 165.1 384 192 384c27.5 0 55-10.6 77.5-26.1c11.1-7.9 25.9-7.9 37 0zm0-144C329 229.4 356.5 240 384 240c26.9 0 55.4-10.8 77.4-26.1c0 0 0 0 0 0c11.9-8.5 28.1-7.8 39.2 1.7c14.4 11.9 32.5 21 50.6 25.2c17.2 4 27.9 21.2 23.9 38.4s-21.2 27.9-38.4 23.9c-24.5-5.7-44.9-16.5-58.2-25C449.5 293.7 417 304 384 304c-31.9 0-60.6-9.9-80.4-18.9c-5.8-2.7-11.1-5.3-15.6-7.7c-4.5 2.4-9.7 5.1-15.6 7.7c-19.8 9-48.5 18.9-80.4 18.9c-33 0-65.5-10.3-94.5-25.8c-13.4 8.4-33.7 19.3-58.2 25c-17.2 4-34.4-6.7-38.4-23.9s6.7-34.4 23.9-38.4c18.1-4.2 36.2-13.3 50.6-25.2c11.1-9.5 27.3-10.1 39.2-1.7c0 0 0 0 0 0C136.7 229.2 165.1 240 192 240c27.5 0 55-10.6 77.5-26.1c11.1-7.9 25.9-7.9 37 0z"/>
+						</svg>
+						<span>Concurrency</span>
+					  </div>
+					  
+					  <div style="background-color: #e0e0e0; color: #000; border-radius: 12px; padding: 20px; display: flex; align-items: center; font-size: 1.2em;">
+						<!-- Portable Icon -->
+						<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" style="margin-right: 50px;" viewBox="0 0 640 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+							<path d="M0 32C0 14.3 14.3 0 32 0L48 0c44.2 0 80 35.8 80 80l0 288c0 8.8 7.2 16 16 16l464 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-66.7 0c1.8 5 2.7 10.4 2.7 16c0 26.5-21.5 48-48 48s-48-21.5-48-48c0-5.6 1-11 2.7-16l-197.5 0c1.8 5 2.7 10.4 2.7 16c0 26.5-21.5 48-48 48s-48-21.5-48-48c0-5.6 1-11 2.7-16L144 448c-44.2 0-80-35.8-80-80L64 80c0-8.8-7.2-16-16-16L32 64C14.3 64 0 49.7 0 32zM432 96l0-40c0-4.4-3.6-8-8-8l-80 0c-4.4 0-8 3.6-8 8l0 40 96 0zM288 96l0-40c0-30.9 25.1-56 56-56l80 0c30.9 0 56 25.1 56 56l0 40 0 224-192 0 0-224zM512 320l0-224 16 0c26.5 0 48 21.5 48 48l0 128c0 26.5-21.5 48-48 48l-16 0zM240 96l16 0 0 224-16 0c-26.5 0-48-21.5-48-48l0-128c0-26.5 21.5-48 48-48z"/>
+						</svg>
+						<span>Portable</span>
+					  </div>
+					  
+					  <div style="background-color: #e0e0e0; color: #000; border-radius: 12px; padding: 20px; display: flex; align-items: center; font-size: 1.2em;">
+						<div style="width: 120; height: 60px; display: flex; justify-content: center; align-items: center; margin-right: 15px; overflow: hidden;">
+						  <img src="https://raw.githubusercontent.com/nf-core/logos/master/nf-core-logos/nf-core-logo.svg"
+							   alt="nf-core logo"
+							   style="width: 120%; height: auto; object-fit: contain;">
+						</div>
+						<span>Community</span>
+					  </div>
+					  
+					</div>
+				  </section>
+				
+				<section>
+					<section>
+						<h3>Landscape Genomics</h3>
+						<p>Aims to understand how environmental heterogeneity influences the distribution of genetic diversity.</p>
+						<img src="./assets/UpperMedway_10m_115points.jpg" width="700" height="500">
+					</section>
+					<section>
+						<h3>Population Structure</h3>
+						<p>Patterns of genetic variation within and between individuals</p>
+						<ul>
+							<li>Isolation by distance</li>
+							<li>Genetic drift</li>
+							<li>Selection</li>
+						</ul>
+					</section>
+					<section style="display: flex; flex-direction: column; align-items: center;">
+						<h3>Genome-wide association study (GWAS)</h3>
+						<p>Examines the relationship between different genotypes and specific traits or environments.</p>
+						
+						<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 1em;">
+						  <img src="./assets/GWAS-SimplifiedGenotypeVsEffect.png" 
+							   alt="GWAS Simplified Genotype vs Effect" 
+							   style="max-width: 250px; max-height: 600px; object-fit: contain; background-color: white; padding: 10px; border-radius: 8px;">
+						  
+						  <img src="./assets/manhattan.png" 
+							   alt="Manhattan Plot" 
+							   style="max-width: 500px; max-height: 600px; object-fit: contain;">
+						</div>
+					  </section>
+					<section>
+						<h3>Genetic Offset</h3>
+						<p>Difference between the current genetic makeup to the genetic makeup predicted to be optimal for future environmental conditions</p>
+						<div style="display: flex; justify-content: center; margin-top: 20px;">
+							<img src="./assets/landscape_genomics_eucalyptus.jpg" 
+								 alt="Landscape Genomics Eucalyptus" 
+								 style="max-width: 600px; max-height: 600px; object-fit: contain;">
+						</div>
+					</section>			
+				</section>
+
+				<section>
+					<h3>TPPS submission enables seamless integration of studies</h3>
+					<p>Allowing for analysis of large datasets in the analysis panel</p>
+					<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 800px; margin: 40px auto;">
+						<div style="background-color: #e0e0e0; color: #000; border-radius: 12px; padding: 20px; display: flex; align-items: center; font-size: 1.2em;">
+							<p><strong>Mega:</strong> Integration of raw data </p>
+						</div>
+						<div style="background-color: #e0e0e0; color: #000; border-radius: 12px; padding: 20px; display: flex; align-items: center; font-size: 1.2em;">
+							<p><strong>Meta:</strong> Integration of summary results</p>
+						</div>
+					</div>
+				</section>
+				<section>
+					<section>
+						<h3>Demo With <i>Populus trichocarpa</i></h3>
+						<table>
+							<thead>
+								<tr>
+									<th>Study</th>
+									<th>Samples</th>
+									<th>Genotypes</th>
+									<th>Phenotypes</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Geraldes et al. 2008</td>
+									<td>55</td>
+									<td>32,000</td>
+									<td>0</td>
+								</tr>
+								<tr>
+									<td>Mckown et al. 2013</td>
+									<td>555</td>
+									<td>0</td>
+									<td>400</td>
+								</tr>
+								<tr>
+									<td>Mckown et al. 2014</td>
+									<td>555</td>
+									<td>28,000</td>
+									<td>0</td>
+								</tr>
+							</tbody>
+						</table>	
+					</section>
+					<section>
+						<h3>Genotype Assay</h3>
+						<p>A cost effective way to obtain tens of thousands of mutations</p>
+						<img src="./assets/microarray.jpg" 
+							 alt="DNA MicroArray" 
+							 style="max-width: 500px; max-height: 600px; object-fit: contain;">
+					</section>
+
+					<section>
+						<h3>Filter and Select studies in cartograplant</h3>
+						<video controls autoplay style="max-width: 100%; height: auto;">
+							<source src="./assets/NATC-FilteringAndSelectingStudies.mp4" type="video/mp4">
+							<p>Your browser does not support the video tag.</p>
+						</video>
+					</section>
+				</section>
+				  
+				<section>
+					<section>
+						<h3>Panel 1: Workspace</h3>
+						<p>Responsible for file management:</p>
+						<ul>
+							<li>Create new workspace directory</li>
+							<li>Upload files from local machine</li>
+							<li>Stores output from workflows</li>
+							<li>Delete Files</li>
+						</ul>
+					</section>
+					<section>
+						<video controls autoplay style="max-width: 100%; height: auto;">
+							<source src="../assets/NATC-Workspace.mp4" type="video/mp4">
+						</video>
+					</section>
+
+				</section>
+
+				  <section>
+					<section>
+						<h3>Panel 2: Study-Context</h3>
+						<div class="mermaid-container">
+						  <pre class="mermaid">
+							%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true }}}%%
+							flowchart LR
+							A[VCF] --> B{Are there clones?}
+							dbid1[(Database)] --> B
+							B --> |NO| C[Do nothing]
+							B --> |YES| D[Rename Samples]
+						  </pre>
+						</div>
+						<div>
+							<table style="font-size:2.0vw">
+								<thead>
+									<tr>
+										<th>Study 1</th>
+										<th>Study 2</th>
+										<th>Study 3</th>
+										<th>Standard Name</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>GLCA-26-1</td>
+										<td>GLCA26-1</td>
+										<td>GLCA26-1</td>
+										<td>sample05</td>
+									</tr>
+									<tr>
+										<td>HFCA-20-2</td>
+										<td>Null</td>
+										<td>Null</td>
+										<td>sample06</td>									
+									</tr>
+								</tbody>
+						</div>
+						</table>
+					</section>
+					<section>
+						<video autoplay controls style="max-width: 100%; height: auto;">
+							<source src="../assets/NATC-StudyContext.mp4" type="video/mp4">
+							<p>Your browser does not support the video tag.</p>
+						</video>
+					</section>
+				  </section>
+
+				<section>
+					<section>
+						<h3>Panel 3: Filter By Traits</h3>
+						<p>Select phenotypes of interest for upload into workspace</p>
+						<ul>
+							<li>Determine total counts</li>
+							<li>Redundancy analysis based on x>1 phenotypes</li>
+						</ul>
+					</section>
+					<section>
+						<img src="./assets/NATC-filterByTraits.png" alt="Filter By Traits" style="max-width: 100%; height: auto;">
+					</section>
+					<section>
+						<h3>Phenotype File Output Format</h3>
+						<div style="overflow-x: auto; max-width: 100%;">
+							<table style="font-size: 2.0vw; width: 100%; border-collapse: collapse; margin: 20px 0;">
+								<thead>
+									<tr>
+										<th>phenotype_id</th>
+										<th>phenotype_name</th>
+										<th>plant_accession</th>
+										<th>study_accession</th>
+										<th>year</th>
+										<th>value</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>8880144</td>
+										<td>change in plant height</td>
+										<td>TGDR1904-ALAA20-1</td>
+										<td>TGDR1904</td>
+										<td>2009</td>
+										<td>194.7</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h3>Panel 4: Study Markers Overlap</h3>
+						<ol>
+							<li>Marker Overlap</li>
+							<li>Genotype concordance</li>
+							<li>Merge VCF's</li>
+						</ol>
+					</section>
+
+					<section>
+						<h3>Genotype Quality Control</h3>
+						<video controls autoplay style="max-width: 100%; height: auto;">
+							<source src="./assets/NATC-StudyMarkerOverlap.mp4" type="video/mp4">
+							<p>Your browser does not support the video tag.</p>
+						</video>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h3>Panel 5: Variant Filtering</h3>
+						<img src="./assets/NGS-Pipeline.png" alt="NGS Pipeline" style="max-width: 100%; height: auto;">
+					</section>
+
+					<section>
+						<img src="./assets/NATC-variantFiltering.png" alt="Variant Filtering" style="max-width: 100%; height: auto;">
+					</section>
+
+				</section>
+
+
+				  <section>
+					<section>
+						<h3>Panel 6: Population Structure</h3>
+						<div class="mermaid-container">
+						  <pre class="mermaid">
+							%%{init: {'theme': 'dark', 'themeVariables': { 'darkMode': true, 'fontSize': '40px'}}}%%
+							flowchart LR
+							A[VCF] --> B(Convert into Plink format)
+							B --> C[Prune for linkage disequilibrium]
+							C --> D[Measure Population Structure K=2]
+							C --> K2[Measure Population Structure K=3]
+							C --> K3[Measure Population Structure K=4]
+							D --> E{Has lowest cross-validation error?}
+							K2 --> E
+							K3 --> E
+							E --> |YES|F[Plot Population Structure]
+						  </pre>
+						</div>
+					</section>
+
+					<section>
+						<h3>Linkage disequilibrium</h3>
+						<p>Non-random associate of alleles at different loci on a chromosome</p>
+						<div style="background-color: #e0e0e0; color: #000; border-radius: 12px; padding: 20px; display: flex; align-items: center;">
+							<img src="./assets/linkageDisequilibrium.png" alt="Linkage Disequilibrium" style="max-width: 100%; height: auto;">
+						</div>
+					</section>
+
+					<section>
+						<img src="./assets/NATC-PopulationStructure.png" alt="Population Structure" style="max-width: 100%; height: auto;">
+					</section>
+					
+				  </section>
+				  <section>
+					<section>
+						<h3>Panel 7: Choose Environments</h3>
+						<p>multicollinearity: describes a high correlation of two or more independent variables</p>
+						<p></p>
+					</section>
+					<section>
+						<video autoplay controls style="max-width: 100%; height: auto;">
+							<source src="./assets/NATC-EnvironmentalData.mov" type="video/mp4">
+							<p>Your browser does not support the video tag.</p>
+						</video>
+					</section>
+				  </section>
+
+
+				<section>
+					<section>
+						<h3>Panel 8: Run Analysis</h3>
+						<p>Perform G x P and G x E associations</p>
+					</section>
+
+					<section>
+						<h3>Linear Model (LM) in GEMMA</h3>
+						<img src="./assets/NATC-gemmalm.png" alt="Gemma Linear Model" style="max-width: 100%; height: auto;">
+					</section>
+
+					<section>
+						<h3>Spurious correlation</h3>
+						<img src="./assets/spurious_association.jpg" alt="Spurious Association" style="max-width: 100%; height: auto;">
+					</section>
+
+					<section>
+						<h3>Linear Mixed Model (LMM) in GEMMA</h3>
+						<p>
+							$$ \mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\mathbf{u} + \boldsymbol{\epsilon} $$
+						</p>
+						<ul>
+							<li>\( \mathbf{y} \): vector of phenotypes</li>
+							<li>\( \mathbf{X} \): matrix of fixed effects (e.g., SNPs, covariates)</li>
+							<li>\( \boldsymbol{\beta} \): vector of fixed-effect coefficients</li>
+							<li>\( \mathbf{Z} \): incidence matrix for random effects</li>
+							<li>\( \mathbf{u} \sim \mathcal{N}(0, \mathbf{K}\sigma^2_g) \): random genetic effects with kinship matrix \( \mathbf{K} \)</li>
+							<li>\( \boldsymbol{\epsilon} \sim \mathcal{N}(0, \mathbf{I}\sigma^2_e) \): residual errors</li>
+						</ul>
+					</section>
+
+					<section>
+						<h3>Kinship Matrix</h3>
+						<p>Measure the degree of relatedness between samples</p>
+						<img src="./assets/kinshipMatrix.png" alt="Kinship Matrix" style="max-width: 90%; height: 500px;">
+					</section>
+
+					<section>
+						<h3>Linear Mixed Model (LMM) in GEMMA</h3>
+						<img src="./assets/NATC-gemmalmm.png" alt="Gemma Linear Mixed Model" style="max-width: 100%; height: auto;">
+					</section>
+
+					<section>
+						<h3>Linear Mixed Model (LMM) in LEA</h3>
+						<p>
+							$$ \mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{U}\mathbf{V}^\top + \boldsymbol{\epsilon} $$
+						  </p>
+						  <ul>
+							<li>\( \mathbf{Y} \): matrix of genotypes (individuals × loci)</li>
+							<li>\( \mathbf{X} \): matrix of environmental variables (individuals × predictors)</li>
+							<li>\( \boldsymbol{\beta} \): matrix of effect sizes (predictors × loci)</li>
+							<li>\( \mathbf{U} \): matrix of latent factors (individuals × K)</li>
+							<li>\( \mathbf{V} \): matrix of factor loadings (loci × K)</li>
+							<li>\( \boldsymbol{\epsilon} \sim \mathcal{N}(0, \sigma^2) \): residual noise</li>
+						  </ul>
+					</section>
+
+
+					<section>
+						<h3>Linear Mixed Model (LMM) in LEA</h3>
+						<img src="./assets/NATC-lealmm.png" alt="LEA Linear Mixed Model" style="max-width: 100%; height: auto;">
+					</section>
+				</section>
+
+				<section>
+					<img src="./assets/acknowledgements.png" alt="Acknowledgments" style="max-width: 100%; height: auto;">
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/mermaid/mermaid.js"></script>
+		<script src="plugin/math/math.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				navigationMode: 'default',
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMermaid, RevealMath.KaTeX ],
+			});
+		</script>
+	</body>
+</html>
