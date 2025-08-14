@@ -14,30 +14,71 @@
 		<link rel="stylesheet" href="plugin/highlight/monokai.css">
 
 		<style>
-			section.vanta-slide {
-			position: relative;
-			width: 100vw;
-			height: 100vh;
-			padding: 0;
-			margin: 0;
-			overflow: hidden;
+			.profile-container {
+				background-color: #161E2B;
+				border: 1px solid #44526C;
+				border-radius: 10px;
+				padding: 10px;
+				text-align: center;
+				opacity: 0.9;
+				width: 900px;
 			}
-
-			section.vanta-slide > * {
-			position: relative;
-			z-index: 1;
+			.social-links-container {
+				align-items: center;
+				display: flex;
+				flex-direction: row;
+				gap: 30px;
+				justify-content: center;
+				margin: 10px;
+				font-size: small;
+			}
+			img {
+				margin: 0;
 			}
 		</style>
-
-
 	</head>
 	<body>
 		<div class="reveal">
 		<div class="slides">
-			<section id="vanta-bg" class="vanta-slide" data-state="vanta-init">
-			<h1>Welcome to My Portfolio</h1>
+			<section data-background-image="./assets/IMG_7318.jpg">
+				<div class="profile-container">
+					<h3>Gabriel Barrett</h3>
+					<p>Software Developer</p>
+					<div class="social-links-container">
+						<a href="https://www.linkedin.com/in/gabriel-barrett-627b5a139/" target="_blank" style="text-decoration: none; color: inherit;">
+							<div>
+								<img src="./assets/linkedin-svgrepo-com.svg" wdith="40" height="40" alt="LinkedIn">
+								<p style="margin: 0;">LinkedIn</p>
+							</div>
+						</a>
+						<a href="https://github.com/Gabriel-A-Barrett" target="_blank" style="text-decoration: none; color: inherit;">
+							<div>
+								<img src="./assets/github-color-svgrepo-com.svg" wdith="40" height="40" alt="GitHub">
+								<p style="margin: 0;">GitHub</p>
+							</div>
+						</a>
+						<a href="https://gabriel-a-barrett.github.io/" target="_blank" style="text-decoration: none; color: inherit;">
+							<div>
+								<img src="./assets/curriculum-vitae-resume-svgrepo-com-blue.svg" wdith="40" height="40" alt="Resume">
+								<p style="margin: 0;">Resume</p>
+							</div>
+						</a>
+					</div>
+				</div>
 			</section>
-			<section>Projects</section>
+			<section data-background-color="#161E2B">
+				Projects
+			</section>
+			<section data-background-color="#44526C">
+
+			</section>
+			<section data-background-color="#9D9087">
+				<h2>About Me</h2>
+				<p>Hi, I'm Gabriel Barrett, a software developer with a passion for creating innovative solutions.</p>
+			</section>
+			<section data-background-color="#C38F5F"></section>
+			<section data-background-color="#C56F40"></section>
+			<section data-background-color="#433E42"></section>
 		</div>
 		</div>
 
@@ -52,12 +93,13 @@
 			// - https://revealjs.com/initialization/
 			// - https://revealjs.com/config/
 			Reveal.initialize({
+
 				hash: true,
 
 				view: 'scroll',
 				scrollProgress: false,
 
-				navigationMode: 'default',
+				//navigationMode: 'default',
 
 				// Learn about plugins: https://revealjs.com/plugins/
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMermaid, RevealMath.KaTeX ],
@@ -65,31 +107,5 @@
 		</script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
-<script>
-let vantaEffect = null;
-
-Reveal.on('slidechanged', (event) => {
-  const current = event.currentSlide;
-  const isVanta = current.dataset.state === 'vanta-init';
-
-  if (isVanta && !vantaEffect) {
-    vantaEffect = VANTA.WAVES({
-      el: current,
-      mouseControls: true,
-      touchControls: true,
-      minHeight: 200.00,
-      minWidth: 200.00,
-      scale: 1.0,
-      scaleMobile: 1.0,
-      color: 0x111111,
-      shininess: 50
-    });
-  } else if (!isVanta && vantaEffect) {
-    vantaEffect.destroy();
-    vantaEffect = null;
-  }
-});
-</script>
-
 	</body>
 </html>
