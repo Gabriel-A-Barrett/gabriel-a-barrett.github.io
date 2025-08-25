@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="dist/reset.css">
 		<link rel="stylesheet" href="dist/reveal.css">
 		<link rel="stylesheet" href="dist/theme/black.css">
+		<link rel="stylesheet" href="css/project.css">
 
 		<!-- Theme used for syntax highlighted code -->
 		<link rel="stylesheet" href="plugin/highlight/monokai.css">
@@ -35,6 +36,10 @@
 			img {
 				margin: 0;
 			}
+			l-multple {
+				display: flex;
+				justify-content: space-around;
+			}
 		</style>
 	</head>
 	<body>
@@ -47,19 +52,19 @@
 					<div class="social-links-container">
 						<a href="https://www.linkedin.com/in/gabriel-barrett-627b5a139/" target="_blank" style="text-decoration: none; color: inherit;">
 							<div>
-								<img src="./assets/linkedin-svgrepo-com.svg" wdith="40" height="40" alt="LinkedIn">
+								<img src="./assets/linkedin-svgrepo-com.svg" width="40" height="40" alt="LinkedIn">
 								<p style="margin: 0;">LinkedIn</p>
 							</div>
 						</a>
 						<a href="https://github.com/Gabriel-A-Barrett" target="_blank" style="text-decoration: none; color: inherit;">
 							<div>
-								<img src="./assets/github-color-svgrepo-com.svg" wdith="40" height="40" alt="GitHub">
+								<img src="./assets/github-color-svgrepo-com.svg" width="40" height="40" alt="GitHub">
 								<p style="margin: 0;">GitHub</p>
 							</div>
 						</a>
 						<a href="https://gabriel-a-barrett.github.io/assets/Resume.pdf" target="_blank" style="text-decoration: none; color: inherit;">
 							<div>
-								<img src="./assets/curriculum-vitae-resume-svgrepo-com-blue.svg" wdith="40" height="40" alt="Resume">
+								<img src="./assets/curriculum-vitae-resume-svgrepo-com-blue.svg" width="40" height="40" alt="Resume">
 								<p style="margin: 0;">Resume</p>
 							</div>
 						</a>
@@ -67,8 +72,94 @@
 				</div>
 			</section>
 			<section data-background-color="#161E2B">
-				Projects
+			<h2 class="projects-title">Projects</h2>
+
+			<div class="projects-grid">
+
+				<!-- Project 1 -->
+				<a class="project-card" href="https://gitlab.com/TreeGenes/tgdrjdk" target="_blank" rel="noopener">
+				<div class="project-media">
+					<img src="assets/Java.svg" alt="Java JDK for TreeGenes">
+					<span class="badge">August 2023 – Ongoing</span>
+				</div>
+				<div class="project-body">
+					<h3 class="project-title">Chado JDK API</h3>
+					<div class="project-meta">GitLab • Helper methods for NextFlow</div>
+					<p class="project-desc">Helper methods intended for NextFlow projects to access the chado database through the service classes without worrying about specific database logic</p>
+					<div class="tag-row">
+					<span class="tag">Java</span><span class="tag">htslib</span><span class="tag">SQL</span>
+					</div>
+				</div>
+				</a>
+
+				<!-- Project 2 -->
+				<a class="project-card" href="https://gitlab.com/TreeGenes/new-study-pipeline" target="_blank" rel="noopener">
+				<div class="project-media">
+					<img src="assets/Nextflow.svg" alt="tpps ingestion pipeline">
+					<span class="badge">Dec 2023 – Prototype</span>
+				</div>
+				<div class="project-body">
+					<h3 class="project-title">New Study Pipeline</h3>
+					<div class="project-meta">GitLab • TPPS data ingestion</div>
+					<p class="project-desc">A NextFlow pipeline to ingest TPPS study through performing coordinate liftover and measuring population structure for insertion into db</p>
+					<div class="tag-row">
+					<span class="tag">NextFlow</span><span class="tag">Machine Learning</span><span class="tag">TPPS</span>
+					</div>
+				</div>
+				</a>
+
+				<!-- Project 3 -->
+				<a class="project-card" href="https://gitlab.com/TreeGenes/variant-filtering-pipeline" target="_blank" rel="noopener">
+				<div class="project-media">
+					<img src="assets/Nextflow.svg" alt="variant call file processing pipeline">
+					<span class="badge">September 2023 – Prototype</span>
+				</div>
+				<div class="project-body">
+					<h3 class="project-title">VCF toolkit</h3>
+					<div class="project-meta">GitLab • variant filtering pipeline</div>
+					<p class="project-desc">A NextFlow pipeline to standardize vcf's for use in CartograPlant analysis panel</p>
+					<div class="tag-row">
+					<span class="tag">NextFlow</span><span class="tag">CartograPlant</span><span class="tag">Analysis Panel</span><span class="tag">VCF</span>
+					</div>
+				</div>
+				</a>
+			
+			
+				<!-- Project 4 -->
+				<a class="project-card" href="https://github.com/Gabriel-A-Barrett/radseq" target="_blank" rel="noopener">
+				<div class="project-media">
+					<img src="assets/Nextflow.svg" alt="radseq variant calling pipeline">
+					<span class="badge">September 2022 – Prototype</span>
+				</div>
+				<div class="project-body">
+					<h3 class="project-title">RADseq variant calling pipeline</h3>
+					<div class="project-meta">RADseq • variant calling</div>
+					<p class="project-desc">A NextFlow pipeline to call variants from RADseq data</p>
+					<div class="tag-row">
+					<span class="tag">nf-core</span><span class="tag">RADseq</span><span class="tag">Variant Calling</span><span class="tag">R Shiny</span>
+					</div>
+				</div>
+				</a>
+			
+				<!-- Project 5 -->
+				<a class="project-card" href="https://gitlab.com/Gabriel-A-Barrett/treegenes" target="_blank" rel="noopener">
+				<div class="project-media">
+					<img src="assets/Java.svg" alt="Java CLI">
+					<span class="badge">September 2022 – Prototype</span>
+				</div>
+				<div class="project-body">
+					<h3 class="project-title">Java Command Line Interface</h3>
+					<div class="project-meta">Java • CLI • Gentoype Assay • GFF3 • FASTA</div>
+					<p class="project-desc">A command line interface for NGS file conversion and quality control checks</p>
+					<div class="tag-row">
+					<span class="tag">Java</span><span class="tag">Quality Control</span><span class="tag">KMP algorithm</span>
+					</div>
+				</div>
+				</a>
+			</div>
 			</section>
+			
+			<!--
 			<section data-background-color="#44526C">
 
 			</section>
@@ -78,7 +169,8 @@
 			</section>
 			<section data-background-color="#C38F5F"></section>
 			<section data-background-color="#C56F40"></section>
-			<section data-background-color="#433E42"></section>
+			<section data-background-color="#433E42"></section>			
+			-->
 		</div>
 		</div>
 
